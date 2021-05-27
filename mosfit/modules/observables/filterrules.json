@@ -529,8 +529,7 @@
 	},
 	{
 		"instruments": [
-			"CFH12k",
-			"P48"
+			"CFH12k"
 		],
 		"systems":[
 			"AB"
@@ -2181,6 +2180,30 @@
 				"offset": 0
 			}
 		}
+
+	},
+	{
+		"telescopes": [
+			"P48"
+		],
+		"systems": [
+			"AB"
+		],
+		"instruments": [
+			"ZTF"
+		],
+		"filters": {
+			"r": {
+				"SVO": "Palomar/ZTF.r"
+			},
+			"g": {
+				"SVO": "Palomar/ZTF.g"
+			},
+			"i": {
+				"SVO": "Palomar/ZTF.i"
+			}
+		}
+
 	},
 	{
 		"telescopes": [
