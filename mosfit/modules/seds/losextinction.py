@@ -98,10 +98,15 @@ class LOSExtinction(SED):
                         extinct_cache[bi][ind] = self.mm83(
                             self._nh_host,
                             self._band_rest_wavelengths[bi][ind])
+
+                ext = self._mw_extinct[bi] + extinct_cache[bi]
+                flux = self._seds[si]
+
+                ext = ext.value if hasattr(ext, 'value') else ext
+                flux = flux.value if hasattr(flux, 'value') else flux
+
                 # Add host and MW contributions
-                eapp(
-                    self._mw_extinct[bi] + extinct_cache[bi],
-                    self._seds[si], inplace=True)
+                eapp(ext, flux, inplace=True)
             else:
                 # wavelengths = np.array(
                 #   [c.c.cgs.value / self._frequencies[si]])
