@@ -320,7 +320,7 @@ class Fallback(Engine):
                         (self._sim_beta[g][interp_index_high] -
                          self._sim_beta[g][interp_index_low]))
 
-                time = np.array(time, dtype = object)
+                time = np.array(time, dtype='object')
 
                 timedict[g] = time
                 dmdtdict[g] = dmdt
@@ -565,16 +565,14 @@ class Fallback(Engine):
         lengthpretimes = len(np.where(self._times < time[0])[0])
         lengthposttimes = len(np.where(self._times > time[-1])[0])
 
-        # include len(self._times) instead of just using -lengthposttimes
-        # for indexing in case lengthposttimes == 0
-        dmdt2 = timeinterpfunc(self._times[lengthpretimes:(len(self._times) -
-                                                           lengthposttimes)])
-        
         # this removes all extrapolation by interp1d by setting dmdtnew = 0
         # outside bounds of self._times
         dmdt1 = np.zeros(lengthpretimes)
         dmdt3 = np.zeros(lengthposttimes)
-
+        # include len(self._times) instead of just using -lengthposttimes
+        # for indexing in case lengthposttimes == 0
+        dmdt2 = timeinterpfunc(self._times[lengthpretimes:(len(self._times) -
+                                                           lengthposttimes)])
         dmdtnew = np.append(dmdt1, dmdt2)
         dmdtnew = np.append(dmdtnew, dmdt3)
 
@@ -592,10 +590,12 @@ class Fallback(Engine):
         Ledd = (FOUR_PI * c.G.cgs.value * self._Mh * M_SUN_CGS *
                 C_CGS / kappa_t)
 
-        self._Leddlim = kwargs['Leddlim']  # user defined multiple of Ledd, default is 1
-        luminosities = (luminosities * self._Leddlim*Ledd / (luminosities + self._Leddlim*Ledd))
-        luminosities = [0.0 if np.isnan(x) else x for x in luminosities]
+        # 2 options for soft Ledd cuts, try both & see what fits stuff better
+        # luminosities = np.where(
+        #    luminosities > Ledd, (1. + np.log10(luminosities/Ledd)) * Ledd,
+        #    luminosities)
+        luminosities = (luminosities * Ledd / (luminosities + Ledd))
 
-        return {self.dense_key('luminosities'): luminosities, 'Rstar': Rstar,
+        return {'dense_luminosities': luminosities, 'Rstar': Rstar,
                 'tpeak': tpeak, 'beta': self._beta, 'starmass': self._Mstar,
                 'dmdt': dmdtnew, 'Ledd': Ledd, 'tfallback': float(tfallback)}
