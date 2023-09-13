@@ -218,7 +218,9 @@ class Photometry(Module):
                             ])
                             if (not self._model._fitter._prefer_cache or
                                     not os.path.exists(path)):
-                                with open_atomic(path, 'w') as f:
+                                from pathlib import Path
+                                path = Path.cwd() / path
+                                with open(path, 'w') as f:
                                     f.write(vo_string)
 
                         elif os.path.exists(xml_path):
