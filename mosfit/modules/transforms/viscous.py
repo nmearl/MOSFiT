@@ -34,10 +34,10 @@ class Viscous(Transform):
         lu = len(uniq_times)
 
         num = int(self.N_INT_TIMES / 2.0)
-        lsp = np.geomspace(
-            10 ** (np.log10(tvisc / self._dense_times_since_exp[-1]) +
-                   self.MIN_LOG_SPACING),
-            10 ** 0, num)
+        lsp = np.logspace(
+            np.log10(tvisc /
+                     self._dense_times_since_exp[-1]) +
+            self.MIN_LOG_SPACING, 0, num)
         xm = np.unique(np.concatenate((lsp, 1 - lsp)))
 
         int_times = np.clip(tb + (uniq_times.reshape(lu, 1) - tb) * xm, tb,

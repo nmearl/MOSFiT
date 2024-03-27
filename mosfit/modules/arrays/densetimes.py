@@ -33,9 +33,9 @@ class DenseTimes(Array):
         if max_times > self._rest_t_explosion:
             outputs['dense_times'] = np.unique(
                 np.concatenate(([0.0], [
-                    x + self._rest_t_explosion for x in np.geomspace(
-                        10 ** self.L_T_MIN,
-                        max_times - self._rest_t_explosion,
+                    x + self._rest_t_explosion for x in np.logspace(
+                        self.L_T_MIN,
+                        np.log10(max_times - self._rest_t_explosion),
                         num=self._n_times)
                 ], self._rest_times)))
         else:
